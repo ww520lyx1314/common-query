@@ -1,5 +1,5 @@
 
-默认访问路径http://localhost:8080/cardreperson/queryCustomCondition/toCustomsearch
+默认访问路径 http://localhost:8080/cardreperson/queryCustomCondition/toCustomsearch
 
 综合查询的功能：
 
@@ -28,17 +28,23 @@ query_custom_condition
 
 dataType 可以实现的类型有：select，date_month，text
 
-select： 	code        下拉选dict表里面的type字段
+select： 	
+
+		 code        下拉选dict表里面的type字段
 
 		 dataType     select
 		 
 		 dataRef      EQ,NEQ
 		 
-text：       dataType     text
+text：      
+
+	     dataType     text
 
 	     dataRef      LIKE,NOTLIKE
 	     
-date_month：     dataType     date_month
+date_month：     
+
+		 dataType     date_month
 
 		 dataRef      EQ,GT,LT,GTE,LTE,BETWEEN
 		 
