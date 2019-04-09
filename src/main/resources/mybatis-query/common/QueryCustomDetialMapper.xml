@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tfkj.common.dao.QueryCustomDetialDao">
+    
+	<sql id="queryCustomDetialColumns">
+		a.id AS "id",
+		a.tmplid AS "tmplid",
+		a.coidid AS "coidid",
+		a.fieldname AS "fieldName",
+		a.startflag AS "startFlag",
+		a.fieldtext AS "fieldText",
+		a.dataref AS "dataref",
+		a.firstvalue AS "firstValue",
+		a.secondvalue AS "secondValue",
+		a.firstvalue_dataType AS "firstValueDataType",
+		a.secondvalue_dataType AS "secondValueDataType",
+		a.endflag AS "endFlag",
+		a.dmm AS "dmm",
+		a.create_by AS "createBy.userId",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.userId",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		qc.dataRef as dataRefs
+	</sql>
+	
+	<sql id="queryCustomDetialJoins">
+	</sql>
+	<sql id="queryCustomDetialJoins1">
+		LEFT JOIN query_custom_condition AS qc ON (a.coidid = qc.id)
+	</sql>
+    
+	<select id="get" resultType="com.tfkj.common.domain.QueryCustomDetial">
+		SELECT 
+			<include refid="queryCustomDetialColumns"/>
+		FROM query_custom_detial a
+		<include refid="queryCustomDetialJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.tfkj.common.domain.QueryCustomDetial">
+		SELECT 
+			<include refid="queryCustomDetialColumns"/>
+		FROM query_custom_detial a
+		<include refid="queryCustomDetialJoins1"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="tmplid != null and tmplid != ''">
+				AND a.tmplid = #{tmplid}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findAllList" resultType="com.tfkj.common.domain.QueryCustomDetial">
+		SELECT 
+			<include refid="queryCustomDetialColumns"/>
+		FROM query_custom_detial a
+		<include refid="queryCustomDetialJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO query_custom_detial(
+			id,
+			tmplid,
+			coidid,
+			fieldname,
+			startflag,
+			fieldtext,
+			dataref,
+			firstvalue,
+			secondvalue,
+			firstvalue_dataType,
+			secondvalue_dataType,
+			endflag,
+			dmm,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{tmplid},
+			#{coidid},
+			#{fieldName},
+			#{startFlag},
+			#{fieldText},
+			#{dataref},
+			#{firstValue},
+			#{secondValue},
+			#{firstValueDataType},
+			#{secondValueDataType},
+			#{endFlag},
+			#{dmm},
+			#{createBy.userId},
+			#{createDate},
+			#{updateBy.userId},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE query_custom_detial SET 	
+			tmplid = #{tmplid},
+			coidid = #{coidid},
+			fieldname = #{fieldName},
+			startflag = #{startFlag},
+			fieldtext = #{fieldText},
+			dataref = #{dataref},
+			firstvalue = #{firstValue},
+			secondvalue = #{secondValue},
+			firstvalue_dataType = #{firstValueDataType},
+			secondvalue_dataType = #{secondValueDataType},
+			endflag = #{endFlag},
+			dmm = #{dmm},
+			update_by = #{updateBy.userId},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE query_custom_detial SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteAll">
+		DELETE  FROM  query_custom_detial
+	</delete>
+
+	<update id="deleteByTmpId">
+		UPDATE query_custom_detial SET
+			del_flag = #{delflag}
+		WHERE tmplid = #{tmpId}
+	</update>
+	
+</mapper>

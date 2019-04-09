@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link rel="stylesheet" href="/css/csStyle.css">
+<style  type="text/css">
+</style>
+	<body class="gray-bg">
+	<div class="ty-transfer  ml20" id="ued-transfer-1" style="padding-top: 13px;">
+		<div class="fl ty-transfer-list transfer-list-left" >
+			<div class="ty-transfer-list-head">
+				待选列表项
+			</div>
+
+			<div class="ty-transfer-list-body">
+				<ul class="ty-tree-select" >
+					<li th:each="tpl:${tplList}">
+						<span th:text="${tpl.key}" class="spanKey" style="display: none;"></span>
+						<span th:text="${tpl.name}" class="spanName" style="display: none;"></span>
+						<div th:if = "${tpl.parentkey} eq '0'" class="ty-tree-div" style="pointer-events: none">
+							<span th:text="${tpl.id}" class="spanId" style="display: none;"></span>
+							<label class="tyue-checkbox-wrapper">
+								<span class="tyue-checkbox-txt"  th:text="${tpl.name}" style="font-size:16px;font-weight:bold">
+                            	</span>
+							</label>
+						</div>
+						<!--  && !tableListItem.contains(tpl.key)-->
+						<div th:if = "${tpl.parentkey ne '0' }"  class="ty-tree-div">
+							<span th:text="${tpl.id}" class="spanId" style="display: none;"></span>
+							<label class="tyue-checkbox-wrapper">
+                            
+                            <span  class="tyue-checkbox">
+                                <input type="checkbox" class="tyue-checkbox-input" >
+                                <span class="tyue-checkbox-circle">
+                                </span>
+                            </span>
+								<span class="tyue-checkbox-txt"  th:text="${tpl.name}">
+                            	</span>
+							</label>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="ty-transfer-list-foot">
+				<div class="ty-tree-div">
+					<div class="tyc-check-blue fl">
+						<input type="checkbox" class="transfer-all-check" style="margin: 0px;">
+						<span>
+						</span>
+					</div>
+					<div class="ty-tree-text">
+						全选
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="fl ty-transfer-operation">
+        <span class="ty-transfer-btn-toright to-switch">
+        </span>
+			<span class="ty-transfer-btn-toleft to-switch">
+        </span>
+		</div>
+		<div class="fl ty-transfer-list transfer-list-right">
+			<div class="ty-transfer-list-head">
+				已选列表项
+			</div>
+			<div  id="selectedItem" class="ty-transfer-list-body">
+				<ul  class="ty-tree-select">
+
+				</ul>
+			</div>
+			<div class="ty-transfer-list-foot">
+				<div class="ty-tree-div">
+					<div class="tyc-check-blue fl">
+						<input type="checkbox" class="transfer-all-check"  style="margin: 0px;">
+						<span>
+                    </span>
+					</div>
+					<div class="ty-tree-text f1">
+						全选
+                        <input id="up"  class="btn  btn-primary" type="button"  value="上移" style="padding: 2px 5px;display: inline-block;margin-left: 100px"/>
+                        <input id="down"  class="btn  btn-primary" type="button"   value="下移" style="padding: 2px 5px;display: inline-block"/>
+                    </div>
+				</div>
+			</div>
+		</div>
+		      
+		<div class="clearboth">
+		</div>
+	</div>
+	</body>
+
+
+	<div th:include="include::footer"></div>
+    <script type="text/javascript" src="/js/Transfer.js"></script>
+    <script type="text/javascript" src="/js/query/listItemEchart.js"></script>
+	<script src="/js/plugins/echarts/echarts-all.js"></script>
+	<script type="text/javascript">
+        $("#ued-transfer-1").transferItem();
+		$(function(){
+		    //上移
+		    $("#up").click(function(){
+		        //查询出的结果为倒序
+                var checkBoxs =$(this).parents(".ty-transfer-list-foot").siblings(".ty-transfer-list-body").find(":checked").parents("li");
+                var arry=[];
+                //调整checkBox顺序
+                for(var i=0;i<checkBoxs.length;i++){
+                    arry.push(checkBoxs[checkBoxs.length-1-i])
+                }
+                //取第一个元素前面的元素
+                var pre=$(arry[0]).prev();
+                pre.before(arry);
+            })
+            //下移
+            $("#down").click(function(){
+                var checkBoxs =$(this).parents(".ty-transfer-list-foot").siblings(".ty-transfer-list-body").find(":checked").parents("li");
+                var arry=[];
+                //调整checkBox顺序
+                for(var i=0;i<checkBoxs.length;i++){
+                    arry.push(checkBoxs[checkBoxs.length-1-i])
+                }
+                var aft=$(arry[arry.length-1]).next();
+                aft.after(arry);
+            })
+
+		})
+	</script>
+</body>
+</html>

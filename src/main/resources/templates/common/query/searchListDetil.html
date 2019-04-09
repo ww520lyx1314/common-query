@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<style type="text/css">
+	/*bootstrap table 固定宽度*/
+	.table {table-layout:fixed;}
+</style>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+			<div class="ibox">
+				<div class="ibox-body">
+							<div class="fixed-table-toolbar">
+								<div class="columns pull-left">
+									<button  type="button" class="btn  btn-danger"
+											onclick="batchRemove()">
+										<i class="fa fa-trash" aria-hidden="true"></i>批量删除
+									</button>
+
+								</div>
+							</div>
+							<table id="exampleTable1" data-mobile-responsive="true">
+							</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" src="/js/query/pako.js"></script>
+	<script type="text/javascript" src="/js/query/smryBaseSearch.js"></script>
+</body>
+</html>

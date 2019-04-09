@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tfkj.common.dao.QueryCustomTplDao">
+    
+	<sql id="queryCustomTplColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.value AS "value",
+		a.sqltxt AS "sqltxt",
+		a.user_id AS "user.id",
+		a.sort_id AS "sortId",
+		a.create_by AS "createBy.userId",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.userId",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.tables AS "tables"
+	</sql>
+	
+	<sql id="queryCustomTplJoins">
+		LEFT JOIN sys_user u5 ON u5.id = a.user_id
+	</sql>
+	<sql id="queryCustomTplJoins1">
+	</sql>
+    
+	<select id="get" resultType="com.tfkj.common.domain.QueryCustomTpl">
+		SELECT 
+			<include refid="queryCustomTplColumns"/>
+		FROM query_custom_tpl a
+		<include refid="queryCustomTplJoins1"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" parameterType="com.tfkj.common.domain.QueryCustomTpl"  resultType="com.tfkj.common.domain.QueryCustomTpl">
+		<choose>
+			<when test="name!=null">
+				<bind name="likeName" value="'%' + name + '%'"/>
+			</when>
+			<otherwise>
+				<bind name="likeName" value="'%%'"/>
+			</otherwise>
+		</choose>
+		SELECT 
+			<include refid="queryCustomTplColumns"/>
+		FROM query_custom_tpl a
+		<include refid="queryCustomTplJoins1"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE #{likeName}
+				</if>
+			<if test="type!=null and type !=''">
+				AND a.type = #{type}
+			</if>
+			<if test="createBy!=null and createBy.userId != null and createBy.userId != ''">
+				AND a.create_by = #{createBy.userId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findAllList" resultType="com.tfkj.common.domain.QueryCustomTpl">
+		SELECT 
+			<include refid="queryCustomTplColumns"/>
+		FROM query_custom_tpl a
+		<include refid="queryCustomTplJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO query_custom_tpl(
+			id,
+			name,
+			value,
+			sqltxt,
+			tables,
+			user_id,
+			sort_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{value},
+			#{sqltxt},
+			#{tables},
+			#{user.userId},
+			#{sortId},
+			#{createBy.userId},
+			#{createDate},
+			#{updateBy.userId},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE query_custom_tpl SET
+			<if test="name != null and name !=''" >
+				name = #{name}
+			</if>
+			<if test="value != null and value !=''">
+				,value = #{value}
+			</if>
+			<if test="sqltxt != null and sqltxt !=''">
+				,sqltxt = #{sqltxt}
+			</if>
+			<if test="tables != null and tables !=''">
+				,tables = #{tables}
+			</if>
+			<if test="user  != null and user.userId !=''">
+				,user_id = #{user.userId}
+			</if>
+			<if test="sortId != null and sortId !=''">
+				,sort_id = #{sortId}
+			</if>
+			<if test="updateBy != null and updateBy.userId !=''">
+				,update_by = #{updateBy.userId}
+			</if>
+			<if test="updateDate != null and updateDate !=''">
+				,update_date = #{updateDate}
+			</if>
+			<if test="remarks != null and remarks !=''">
+				,remarks = #{remarks}
+			</if>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE query_custom_tpl SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<delete id="deleteAll">
+		DELETE  FROM  query_custom_tpl
+	</delete>
+
+
+	<resultMap id="queryCustomTplList" type="com.tfkj.common.domain.QueryCustomTpl">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="value" jdbcType="VARCHAR" property="value" />
+        <result column="sqlTxt" jdbcType="VARCHAR" property="sqltxt" />
+        <result column="user_id" jdbcType="VARCHAR" property="user.id" />
+        <result column="sort_id" jdbcType="INTEGER" property="sortId" />
+        <result column="create_by" jdbcType="VARCHAR" property="createBy.userId" />
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy.userId" />
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+        <result column="del_flag" jdbcType="VARCHAR" property="delFlag" />
+        <collection property="queryCustomDetialList" ofType="com.tfkj.common.domain.QueryCustomDetial">
+            <id column="cid" jdbcType="VARCHAR" property="id" />
+            <result column="tmplId" jdbcType="VARCHAR" property="tmplid"/>
+            <result column="coidId" jdbcType="VARCHAR" property="coidid" />
+            <result column="fieldName" jdbcType="VARCHAR" property="fieldName" />
+            <result column="startFlag" jdbcType="VARCHAR" property="startFlag" />
+            <result column="fieldText" jdbcType="VARCHAR" property="fieldText" />
+            <result column="dataRef" jdbcType="VARCHAR" property="dataref" />
+            <result column="firstValue" jdbcType="VARCHAR" property="firstValue" />
+            <result column="firstValue_dataType" jdbcType="VARCHAR" property="firstValueDataType" />
+            <result column="secondValue" jdbcType="VARCHAR" property="secondValue" />
+            <result column="secondValue_dataType" jdbcType="VARCHAR" property="secondValueDataType" />
+            <result column="endflag" jdbcType="VARCHAR" property="endFlag" />
+            <result column="dmm" jdbcType="VARCHAR" property="dmm"/>
+        </collection>
+    </resultMap>
+
+    <select id="getQueryCustomTpls" parameterType="java.util.HashMap" resultMap="queryCustomTplList">
+        SELECT
+        a.id AS "id",
+		a.name AS "name",
+		a.value AS "value",
+		a.sqltxt AS "sqltxt",
+		a.user_id AS "user_id",
+		a.sort_id AS "sortId",
+		a.create_by AS "create_by",
+		a.create_date AS "createDate",
+		a.update_by AS "update_by",
+		a.update_date AS "updateDate",
+		a.del_flag AS "del_flag",
+        q.id AS "cid",
+		q.tmplid AS "tmplid",
+		q.coidid AS "coidid",
+		q.fieldname AS "fieldName",
+		q.startflag AS "startFlag",
+		q.fieldtext AS "fieldText",
+		q.dataref AS "dataRef",
+		q.firstvalue AS "firstValue",
+		q.secondvalue AS "secondValue",
+		q.firstValue_dataType AS "firstValue_dataType",
+		q.secondValue_dataType AS "secondValue_dataType",
+		q.endflag AS "endflag",
+		q.dmm AS "dmm"
+		FROM
+		query_custom_tpl a LEFT JOIN
+		query_custom_detial q ON (a.id = q.tmplId)
+		WHERE
+		a.del_flag = 0 and q.del_flag = 0
+        <foreach item="id" separator="," collection="ids" open="and a.id in (" close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

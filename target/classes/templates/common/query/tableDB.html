@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link rel="stylesheet" href="/css/csStyle.css">
+<style  type="text/css">
+</style>
+	<body class="gray-bg">
+	<div class="ty-transfer  ml20" id="ued-transfer-1" style="padding-top: 13px;">
+		<div class="fl ty-transfer-list transfer-list-left" >
+			<div class="ty-transfer-list-head">
+				请选择数据库表
+			</div>
+
+			<div class="ty-transfer-list-body">
+				<ul class="ty-tree-select" >
+					<li th:each="tpl:${tableList}">
+						<div class="ty-tree-div">
+							<span th:text="${tpl.TABLE_NAME}" class="spanId" style="display: none;"></span>
+							<span th:text="${tpl.TABLE_COMMENT}" class="spanText" style="display: none;"></span>
+							<label class="tyue-checkbox-wrapper">
+                            <span class="tyue-checkbox">
+                                <input type="checkbox" class="tyue-checkbox-input" >
+                                <span class="tyue-checkbox-circle">
+                                </span>
+                            </span>
+								<span class="tyue-checkbox-txt"  th:text="${tpl.TABLE_NAME}+'('+${tpl.TABLE_COMMENT}+')'">
+                            	</span>
+							</label>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="ty-transfer-list-foot">
+				<div class="ty-tree-div">
+					<div class="tyc-check-blue fl">
+						<input type="checkbox" class="transfer-all-check" style="margin: 0px;">
+						<span>
+						</span>
+					</div>
+					<div class="ty-tree-text">
+						全选
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="fl ty-transfer-operation">
+        <span class="ty-transfer-btn-toright to-switch">
+        </span>
+			<span class="ty-transfer-btn-toleft to-switch">
+        </span>
+		</div>
+		<div class="fl ty-transfer-list transfer-list-right" >
+			<div class="ty-transfer-list-head">
+				待查询数据库表(左连接)
+			</div>
+			<div class="ty-transfer-list-body">
+				<ul class="ty-tree-select">
+					<li th:each="tpl:${queryList}">
+						<div class="ty-tree-div">
+							<span th:text="${tpl.tableName}" class="spanId" style="display: none;"></span>
+							<span th:text="${tpl.TableNameText}" class="spanText" style="display: none;"></span>
+							<label class="tyue-checkbox-wrapper">
+                            <span class="tyue-checkbox">
+                                <input type="checkbox" class="tyue-checkbox-input" >
+                                <span class="tyue-checkbox-circle">
+                                </span>
+                            </span>
+								<span class="tyue-checkbox-txt"  th:text="${tpl.tableName}+'('+${tpl.TableNameText}+')'">
+                            	</span>
+							</label>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="ty-transfer-list-foot">
+				<div class="ty-tree-div">
+					<div class="tyc-check-blue fl">
+						<input type="checkbox" class="transfer-all-check"  style="margin: 0px;">
+						<span>
+                    </span>
+					</div>
+					<div class="ty-tree-text">
+						全选
+                        <input id="up"  class="btn  btn-primary" type="button"  value="上移" style="padding: 2px 5px;margin-left: 60px;"/>
+                        <input id="down"  class="btn  btn-primary" type="button"   value="下移" style="padding: 2px 5px"/>
+                    </div>
+				</div>
+			</div>
+		</div>
+		<div class="fl" style="background-color: white;border: 1px solid #d9d9d9;height: 500px;margin-left: 20px;border-radius: 3px;width: 300px;">
+			<span  style="margin-left: 10px;height: 45px;line-height: 45px;text-align: center;font-size: 15px;color: #666;font-weight: bold;">
+				表关键字段
+			</span>
+			<span  style="margin-left:40px;height: 45px;line-height: 45px;text-align: center;font-size: 15px;color: #666;font-weight: bold;">
+				=
+			</span>
+			<span  style="margin-left:40px;height: 45px;line-height: 45px;text-align: center;font-size: 15px;color: #666;font-weight: bold;">
+				关联其他表字段
+			</span>
+
+			<div id="btDiv" style="height: 423px;width: 200px;border-top: 1px solid #d9d9d9;padding: 4px 10px;width: 295px">
+				<ul class="ty-tree-select" >
+					<li style="height: 30px" th:each="tpl,userStat:${queryList}">
+						<label class="tyue-checkbox-wrapper">
+							<select style="width: 120px">
+								<option value=""></option>
+								<option th:each="sel:${tpl.singleSelectOption}"  th:value="${sel.tableName}+'-'+${sel.tableColumn}" th:text="${sel.tableName}+'.'+${sel.tableColumn}" th:selected="${sel.isSelect}">
+								</option>
+							</select>
+							<select style="width: 120px;margin-left: 20px">
+								<option value=""></option>
+								<optgroup th:label="${selMul.tableName}" th:each="selMul:${tpl.mulSelectOption}">
+									<option th:each="selMulOption:${selMul.listSelect}"  th:value="${selMulOption.tableName}+'-'+${selMulOption.tableColumn}" th:text="${selMulOption.tableName}+'.'+${selMulOption.tableColumn}" th:selected="${selMulOption.isSelect}">
+									</option>
+								</optgroup>
+							</select>
+						</label>
+					</li >
+
+				</ul>
+			</div>
+			<div class="ty-transfer-list-foot">
+				<div class="ty-tree-div">
+						<input id="hqbzd"  class="btn  btn-primary" type="button"   value="获取表字段配置表关系" style="padding: 2px 5px;margin-left: 140px;margin-top: 3px"/>
+				</div>
+			</div>
+		</div>  
+		<div class="fl" style="height: 500px;line-height:500px;margin-left: 20px;border-radius: 3px;width: 50px;">
+			<input id="savePz"  class="btn  btn-primary" type="button"   value="保存配置" />
+		</div>  
+		<div class="clearboth">
+		</div>
+
+		 
+	</div>
+	</body>
+
+
+	<div th:include="include::footer"></div>
+    <script type="text/javascript" src="/js/Transfer.js"></script>
+	<script src="/js/plugins/echarts/echarts-all.js"></script>
+	<script type="text/javascript">
+        $("#ued-transfer-1").transferItem();
+		$(function(){
+		    //上移
+		    $("#up").click(function(){
+		        //查询出的结果为倒序
+                var checkBoxs =$(this).parents(".ty-transfer-list-foot").siblings(".ty-transfer-list-body").find(":checked").parents("li");
+                var arry=[];
+                //调整checkBox顺序
+                for(var i=0;i<checkBoxs.length;i++){
+                    arry.push(checkBoxs[checkBoxs.length-1-i])
+                }
+                //取第一个元素前面的元素
+                var pre=$(arry[0]).prev();
+                pre.before(arry);
+            })
+            //下移
+            $("#down").click(function(){
+                var checkBoxs =$(this).parents(".ty-transfer-list-foot").siblings(".ty-transfer-list-body").find(":checked").parents("li");
+                var arry=[];
+                //调整checkBox顺序
+                for(var i=0;i<checkBoxs.length;i++){
+                    arry.push(checkBoxs[checkBoxs.length-1-i])
+                }
+                var aft=$(arry[arry.length-1]).next();
+                aft.after(arry);
+            })
+
+			//获取表字段
+			$("#hqbzd").click (function(){
+                var ids=new  Array()
+                $(".transfer-list-right").find(".spanId").each(function () {
+                    ids.push($(this).text());
+                })
+				if(ids.length<1){
+                    alert("请先选择待查询数据库表");
+					return false;
+				}
+                    $.ajax({
+                        type: 'GET',
+                        url: '/cardreperson/queryCustomCondition/getTableColumn?ids=' + ids,
+                        success: function (obj) {
+                            $("#btDiv .ty-tree-select li").remove();
+                            var varHtml='';
+                            //默认选项为空
+                            var varOption='<option value=""></option>';
+                            //分组关联其他表字段
+                            for(var i=0;i<obj.length;i++){
+                                varOption+='<optgroup label="'+obj[i][0].TABLE_NAME+'">'
+                                for(var j=0;j<obj[i].length;j++){
+                                    varOption+='<option value="'+obj[i][j].TABLE_NAME+'-'+obj[i][j].COLUMN_NAME+'">'+obj[i][j].TABLE_NAME+'.'+obj[i][j].COLUMN_NAME+'</option>'
+
+                                }
+                                varOption+='</optgroup>'
+							}
+							for(var i=0;i<obj.length;i++){
+                                varHtml+='<li style="height: 30px"><label class="tyue-checkbox-wrapper"><select style="width: 120px">';
+                                varHtml+='<option value=""></option>'
+                                for(var j=0;j<obj[i].length;j++){
+
+                                    varHtml+='<option value="'+obj[i][j].TABLE_NAME+'-'+obj[i][j].COLUMN_NAME+'">'+obj[i][j].TABLE_NAME+'.'+obj[i][j].COLUMN_NAME+'</option>'
+
+								}
+                                varHtml+='</select><select style="width: 120px;margin-left: 20px">'
+                                varHtml+=varOption;
+                                varHtml+='</select></label></li >';
+							}
+							$("#btDiv .ty-tree-select").append(varHtml);
+                        }
+                    })
+			})
+			//保存配置
+			$("#savePz").click(function(){
+                var tableName=new  Array()
+                $(".transfer-list-right").find(".spanId").each(function () {
+                    tableName.push($(this).text());
+                })
+                if(tableName.length<1){
+                    layer.alert("请先选择待查询数据库表");
+                    return false;
+                }
+                layer.confirm('重新保存表关系会删除原始模板，您需要保存么？', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    var tableNameText=new  Array()
+                    $(".transfer-list-right").find(".spanText").each(function () {
+                        tableNameText.push($(this).text()!=''?$(this).text():'016b2c81bdf54b91a41d9d87d7bbe6e9');
+                    })
+                    var keys=new Array();
+                    $("#btDiv .ty-tree-select li").each(function () {
+                        var twoSelect="";
+                        twoSelect+=$($(this).find("select")[0]).val()+"!";
+                        twoSelect+=$($(this).find("select")[1]).val();
+                        keys.push(twoSelect);
+                    })
+                    $.ajax({
+                        type: 'GET',
+                        url: '/cardreperson/queryCustomCondition/saveTablePz?tableName='+tableName+'&&keys='+keys+'&&tableNameText='+tableNameText,
+                        success:function(obj){
+                            if('success'==obj){
+                                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                parent.layer.close(index);
+                                window.parent.location.reload();//刷新父页面
+                                //清空查询列缓存
+                                window.localStorage.setItem('tableListItem',"");
+                                window.localStorage.setItem('tableText',"");
+                                parent.layer.msg("恭喜您保存成功")
+
+                            }else{
+                                layer.alert("保存失败，请重试！")
+                            }
+                        }
+                    })
+                })
+
+
+			})
+
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tfkj.common.dao.QueryCustomConditionDao">
+    
+	<sql id="queryCustomConditionColumns">
+		a.id AS "id",
+		a.key AS "key",
+		a.name AS "name",
+		a.parentkey AS "parentkey",
+		a.code AS "code",
+		a.datatype AS "datatype",
+		a.dataref AS "dataref",
+		a.sort_id AS "sortId",
+		a.create_by AS "createBy.userId",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.userId",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="queryCustomConditionJoins">
+	</sql>
+    
+	<select id="get" resultType="com.tfkj.common.domain.QueryCustomCondition">
+		SELECT 
+			<include refid="queryCustomConditionColumns"/>
+		FROM query_custom_condition a
+		<include refid="queryCustomConditionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="com.tfkj.common.domain.QueryCustomCondition">
+		<choose>
+			<when test="name!=null">
+				<bind name="likeName" value="'%' + name + '%'"/>
+			</when>
+			<otherwise>
+				<bind name="likeName" value="'%%'"/>
+			</otherwise>
+		</choose>
+		SELECT 
+			<include refid="queryCustomConditionColumns"/>
+		FROM query_custom_condition a
+		<include refid="queryCustomConditionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE #{likeName}
+			</if>
+		</where>
+		ORDER BY a.sort_id ASC
+	</select>
+	
+	<select id="findAllList" resultType="com.tfkj.common.domain.QueryCustomCondition">
+		SELECT 
+			<include refid="queryCustomConditionColumns"/>
+		FROM query_custom_condition a
+		<include refid="queryCustomConditionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO query_custom_condition(
+			id,
+			`key`,
+			name,
+			parentkey,
+			code,
+			datatype,
+			dataref,
+			sort_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{key},
+			#{name},
+			#{parentkey},
+			#{code},
+			#{datatype},
+			#{dataref},
+			#{sortId},
+			#{createBy.userId},
+			#{createDate},
+			#{updateBy.userId},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE query_custom_condition SET 	
+			key = #{key},
+			name = #{name},
+			parentkey = #{parentkey},
+			code = #{code},
+			datatype = #{datatype},
+			dataref = #{dataref},
+			sort_id = #{sortId},
+			update_by = #{updateBy.userId},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE query_custom_condition SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteAll">
+		DELETE  from query_custom_condition
+	</update>
+
+
+
+</mapper>
